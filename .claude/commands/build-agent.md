@@ -9,8 +9,7 @@ Build a complete AI agent through structured discovery and automated project gen
 
 ## Before You Start
 
-**Read the CLAUDE.md file first** to understand where all the reference materials are located:
-- `/Users/philipgalebach/coding-projects/_agents/agent_prompt_builder/CLAUDE.md`
+**Read the CLAUDE.md file first** to understand where all the reference materials are located.
 
 ## Key Directories
 
@@ -32,16 +31,16 @@ docs/
     └── sqlite-telegram.md        # Lightweight (Telegram bot pattern)
 ```
 
-## Reference Implementations (Existing Agents)
+## Reference Implementations
 
-**IMPORTANT:** Before building, explore these working agents to understand patterns:
+**IMPORTANT:** Before building, read these reference implementation patterns:
 
-1. **Smithers** (Full-stack: Postgres + Web + Hetzner + Composio)
-   - Location: `/Users/philipgalebach/coding-projects/_agents/smithers`
+1. **Full-Stack Pattern** (Postgres + Web + Hetzner + Composio)
+   - Patterns: `docs/reference-implementations/smithers-patterns.md`
    - Template: `docs/templates/postgres-web-hetzner.md`
 
-2. **Spanish Translator** (Lightweight: SQLite + Telegram)
-   - Location: `/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot`
+2. **Telegram Bot Pattern** (Lightweight: SQLite + Telegram)
+   - Patterns: `docs/reference-implementations/telegram-bot-patterns.md`
    - Template: `docs/templates/sqlite-telegram.md`
 
 ## Workflow
@@ -194,19 +193,19 @@ Please review it. Say "build it" when ready, or tell me what to change.
 **Only proceed after user explicitly confirms.**
 
 1. Read the matching template from `docs/templates/`
-2. Explore the reference implementation:
-   - For Postgres/Web: `/Users/philipgalebach/coding-projects/_agents/smithers`
-   - For Telegram: `/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot`
-3. Create project at `/Users/philipgalebach/coding-projects/_agents/{slug}/`
-4. Generate all files based on spec and template patterns
+2. Read the reference implementation patterns:
+   - For Postgres/Web: `docs/reference-implementations/smithers-patterns.md`
+   - For Telegram: `docs/reference-implementations/telegram-bot-patterns.md`
+3. Create project in sibling directory: `../{slug}/`
+4. Generate all files based on spec, template, and reference patterns
 
 **Confirm completion:**
 ```
 Your agent "{name}" has been created at:
-/Users/philipgalebach/coding-projects/_agents/{slug}/
+../{slug}/
 
 Next steps:
-1. cd /Users/philipgalebach/coding-projects/_agents/{slug}
+1. cd ../{slug}
 2. {setup instructions based on template}
 ```
 

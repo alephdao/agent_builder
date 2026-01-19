@@ -9,13 +9,14 @@ Everything is in `docs/`:
 ```
 agent_prompt_builder/
 ├── .claude/commands/
-│   └── build-agent.md          # The main slash command
+│   └── build-agent.md              # The main slash command
 ├── docs/
-│   ├── reference-prompts/      # Example system prompts - READ ALL
-│   ├── agent-sdk/              # Claude Agent SDK documentation
-│   └── templates/              # Architecture templates
-├── specs/                      # Generated spec documents (output)
-└── CLAUDE.md                   # This file
+│   ├── reference-prompts/          # Example system prompts - READ ALL
+│   ├── reference-implementations/  # Code patterns from real agents
+│   ├── agent-sdk/                  # Claude Agent SDK documentation
+│   └── templates/                  # Architecture templates
+├── specs/                          # Generated spec documents (output)
+└── CLAUDE.md                       # This file
 ```
 
 ## Reference Prompts
@@ -56,9 +57,9 @@ reference** - ClaudeSDKClient, ClaudeAgentOptions, tool decorator |
 
 ### 1. Full-Stack: Postgres + Web + Hetzner
 
-**File:** `docs/templates/postgres-web-hetzner.md`
+**Template:** `docs/templates/postgres-web-hetzner.md`
 
-**Reference Implementation:** `/Users/philipgalebach/coding-projects/_agents/smithers`
+**Code Patterns:** `docs/reference-implementations/smithers-patterns.md`
 
 Use when you need:
 - PostgreSQL database (asyncpg)
@@ -69,9 +70,9 @@ Use when you need:
 
 ### 2. Lightweight: SQLite + Telegram
 
-**File:** `docs/templates/sqlite-telegram.md`
+**Template:** `docs/templates/sqlite-telegram.md`
 
-**Reference Implementation:** `/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot`
+**Code Patterns:** `docs/reference-implementations/telegram-bot-patterns.md`
 
 Use when you need:
 - SQLite or JSON file storage
@@ -105,28 +106,31 @@ Setup:
 
 Authenticate via: `claude /mcp` → select "supabase" → "Authenticate"
 
-## Reference Implementations
+## Reference Implementation Patterns
 
-These are working agents you can explore to understand patterns:
+**Location:** `docs/reference-implementations/`
 
-### Smithers (Full-Stack)
-```
-/Users/philipgalebach/coding-projects/_agents/smithers
-```
+These documents capture code patterns and best practices from real production agents:
+
+### Full-Stack Pattern (`smithers-patterns.md`)
+
+Complete implementation guide for:
 - Postgres + Next.js + Hetzner + Composio
-- Multi-agent support
+- Multi-user support with Clerk authentication
 - OAuth via Composio for Calendar, Asana, Slack
-- Clerk authentication
 - SSE streaming responses
+- Database operations and migrations
+- Custom tool implementations
 
-### Spanish Translator (Telegram Bot)
-```
-/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot
-```
-- JSON file storage
-- Telegram bot via aiogram
+### Telegram Bot Pattern (`telegram-bot-patterns.md`)
+
+Complete implementation guide for:
+- Lightweight Telegram bot via aiogram
+- JSON file storage for conversations
 - Per-user Claude clients
 - Voice transcription support
+- Stateful conversation management
+- Docker and systemd deployment
 
 ## How /build-agent Works
 
@@ -148,7 +152,7 @@ These are working agents you can explore to understand patterns:
 
 3. **Spec Generation** - Creates `specs/agent-spec-{slug}.md`
 
-4. **Build** - After approval, creates project at:
+4. **Build** - After approval, creates project in sibling directory:
    ```
-   /Users/philipgalebach/coding-projects/_agents/{slug}/
+   ../{slug}/
    ```
