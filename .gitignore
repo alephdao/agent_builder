@@ -1,22 +1,21 @@
-# Environment
-.env
+# macOS
+.DS_Store
+
+# Python (if any scripts are added later)
+__pycache__/
+*.py[cod]
 .venv/
 venv/
-__pycache__/
-*.pyc
 
-# Data
-data/*.db
-data/*.sqlite
+# Environment
+.env
+.env.local
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
-
-# macOS
-.DS_Store
 
 # Logs
 *.log

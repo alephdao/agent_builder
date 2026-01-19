@@ -1,81 +1,128 @@
-# Agent Prompt Builder
+# Agent Builder
 
-An AI agent that helps you build AI agents. It guides you through a structured discovery process to create comprehensive, effective system prompts.
+A Claude Code slash command that builds complete AI agents. Run `/build-agent` to start.
 
-## Quick Start
+## Directory Structure
 
-```bash
-cd /Users/philipgalebach/coding-projects/_agents/agent_prompt_builder
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python main.py
-```
-
-## How It Works
-
-1. **Describe your agent** - Tell it what kind of agent you want to build
-2. **Answer questions** - The builder asks clarifying questions about:
-   - Core identity & purpose
-   - Personality & character
-   - Tools & capabilities
-   - Context & knowledge needed
-   - Commands & interactions
-   - Output format & style
-   - Safety & guardrails
-   - Examples
-3. **Get your prompt** - The builder generates a complete system prompt
-
-## Commands
-
-- `/list` - List reference prompts in the database
-- `/view [name]` - View a specific reference prompt
-- `/add` - Add a new reference prompt to the database
-- `/draft` - Generate a draft prompt from the conversation
-- `/new` - Start a new conversation
-- `/history` - Show conversation history
-- `/quit` - Exit
-
-## Database
-
-Uses SQLite to store:
-- **prompt_documents** - Reference prompts with name, description, GitHub URL, local path, category
-- **conversations** - Chat sessions
-- **messages** - Message history
-- **generated_prompts** - Prompts created by the builder
-
-## Adding Reference Prompts
-
-Use `/add` to interactively add prompts, or use the database module directly:
-
-```python
-from modules.database import PromptDatabase
-
-db = PromptDatabase("data/prompts.db")
-db.add_document(
-    name="smithers-agent",
-    description="Personal AI assistant with Asana/Calendar integration",
-    github_url="https://github.com/user/repo/blob/main/prompts/smithers.md",
-    local_path="/path/to/smithers.md",
-    category="assistant"
-)
-```
-
-## Architecture
+Everything is in `docs/`:
 
 ```
 agent_prompt_builder/
-├── main.py              # CLI entry point
-├── prompts/
-│   └── system_prompt.md # Builder agent's system prompt
-├── modules/
-│   ├── database.py      # SQLite for prompts & conversations
-│   └── conversation.py  # Conversation manager
-└── data/
-    └── prompts.db       # SQLite database (created on first run)
+├── .claude/commands/
+│   └── build-agent.md          # The main slash command
+├── docs/
+│   ├── reference-prompts/      # Example system prompts - READ ALL
+│   ├── agent-sdk/              # Claude Agent SDK documentation
+│   └── templates/              # Architecture templates
+├── specs/                      # Generated spec documents (output)
+└── CLAUDE.md                   # This file
 ```
 
-## Claude Agent SDK
+## Reference Prompts
 
-Uses the Claude Agent SDK for conversation. Requires either:
-- OAuth credentials in `~/.claude/` (from `claude` CLI)
-- Or `ANTHROPIC_API_KEY` environment variable
+**Location:** `docs/reference-prompts/`
+
+**READ ALL OF THESE** before building an agent. They show what good system prompts look like.
+
+| File | Purpose |
+|------|---------|
+| `claude-code-system-prompt.md` | **Gold standard** - Read first. Multi-tool orchestration, safety rules, tone guidelines |
+| `claude-code-tools.md` | How to document tools in prompts |
+| `aristotle-companion.md` | Conversational personality, Socratic dialogue, tone constraints |
+| `perplexity.md` | Search/research agent patterns |
+
+
+## Claude Agent SDK Documentation
+
+**Location:** `docs/agent-sdk/`
+
+| File | Purpose |
+|------|---------|
+| `00-overview.md` | SDK overview and concepts |
+| `01-quickstart.md` | Getting started guide |
+| `02-python-reference.md` | **Python API 
+
+reference** - ClaudeSDKClient, ClaudeAgentOptions, tool decorator |
+| `03-hooks.md` | Event hooks |
+| `04-mcp-servers.md` | MCP tool servers |
+| `05-permissions.md` | Permission modes |
+| `06-sessions.md` | Session management |
+| `07-subagents.md` | Subagent patterns |
+| `08-custom-tools.md` | Custom tool patterns |
+
+## Architecture Templates
+
+**Location:** `docs/templates/`
+
+### 1. Full-Stack: Postgres + Web + Hetzner
+
+**File:** `docs/templates/postgres-web-hetzner.md`
+
+**Reference Implementation:** `/Users/philipgalebach/coding-projects/_agents/smithers`
+
+Use when you need:
+- PostgreSQL database (asyncpg)
+- Next.js web frontend with Clerk auth
+- Hetzner deployment via Tailscale
+- Composio integrations (Calendar, Asana, Slack)
+- Multi-user support
+
+### 2. Lightweight: SQLite + Telegram
+
+**File:** `docs/templates/sqlite-telegram.md`
+
+**Reference Implementation:** `/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot`
+
+Use when you need:
+- SQLite or JSON file storage
+- Telegram bot interface (aiogram)
+- Single-purpose agent
+- Simple deployment
+
+## Reference Implementations
+
+These are working agents you can explore to understand patterns:
+
+### Smithers (Full-Stack)
+```
+/Users/philipgalebach/coding-projects/_agents/smithers
+```
+- Postgres + Next.js + Hetzner + Composio
+- Multi-agent support
+- OAuth via Composio for Calendar, Asana, Slack
+- Clerk authentication
+- SSE streaming responses
+
+### Spanish Translator (Telegram Bot)
+```
+/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot
+```
+- JSON file storage
+- Telegram bot via aiogram
+- Per-user Claude clients
+- Voice transcription support
+
+## How /build-agent Works
+
+1. **Architecture Selection** - Asks 4 questions to determine template:
+   - Interface (Telegram / Web / CLI)
+   - Database (SQLite / Postgres)
+   - Integrations (None / Composio / Custom)
+   - Deployment (Local / Hetzner)
+
+2. **Deep Interview** - 8 rounds of non-obvious questions about:
+   - Core identity & purpose
+   - Personality & tone
+   - Technical implementation
+   - Data & state
+   - Tools & capabilities
+   - Edge cases & safety
+   - User experience
+   - Examples
+
+3. **Spec Generation** - Creates `specs/agent-spec-{slug}.md`
+
+4. **Build** - After approval, creates project at:
+   ```
+   /Users/philipgalebach/coding-projects/_agents/{slug}/
+   ```
