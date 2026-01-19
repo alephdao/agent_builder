@@ -19,7 +19,6 @@ Run `/build-agent` in Claude Code and answer questions. The system will:
 
 1. **Clone this repo:**
    ```bash
-   cd /Users/philipgalebach/coding-projects/_agents/
    git clone https://github.com/alephdao/agent_builder.git
    cd agent_builder
    ```
@@ -43,7 +42,7 @@ Run `/build-agent` in Claude Code and answer questions. The system will:
    - Approve or request changes
 
 6. **Get your agent built:**
-   - Complete project created at `/Users/philipgalebach/coding-projects/_agents/{your-agent-name}/`
+   - Complete project created in a sibling directory: `../{your-agent-name}/`
    - Includes code, configuration, and deployment instructions
 
 ## What Gets Built
@@ -90,20 +89,14 @@ All documentation is in `docs/`:
 
 ## Reference Implementations
 
-See working examples:
-
-- **Smithers** - Full-stack agent with Postgres, Next.js, Composio integrations
-  - Location: `/Users/philipgalebach/coding-projects/_agents/smithers`
-
-- **Spanish Translator** - Lightweight Telegram bot with JSON storage
-  - Location: `/Users/philipgalebach/coding-projects/_agents/spanish-translator/telegram_bot`
+The `/build-agent` command references working agent implementations to understand patterns and best practices. These are used internally as templates but aren't included in this repository.
 
 ## Example Output
 
 After running `/build-agent`, you'll have:
 
 ```
-/Users/philipgalebach/coding-projects/_agents/{your-agent}/
+../{your-agent}/
 ├── agent.py              # Main agent code with Claude SDK
 ├── tools.py              # Custom tool implementations
 ├── requirements.txt      # Python dependencies
