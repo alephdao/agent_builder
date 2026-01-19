@@ -79,6 +79,32 @@ Use when you need:
 - Single-purpose agent
 - Simple deployment
 
+### 3. Supabase MCP Integration
+
+**File:** `docs/templates/supabase-mcp.md`
+
+Use when you need:
+- Managed PostgreSQL via Supabase (no database management overhead)
+- MCP connection for direct database operations
+- Read/write database access without custom tools
+- Rapid prototyping with hosted infrastructure
+
+**MCP Server:** `https://mcp.supabase.com/mcp`
+
+Setup:
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp"
+    }
+  }
+}
+```
+
+Authenticate via: `claude /mcp` → select "supabase" → "Authenticate"
+
 ## Reference Implementations
 
 These are working agents you can explore to understand patterns:
@@ -106,7 +132,7 @@ These are working agents you can explore to understand patterns:
 
 1. **Architecture Selection** - Asks 4 questions to determine template:
    - Interface (Telegram / Web / CLI)
-   - Database (SQLite / Postgres)
+   - Database (SQLite / Postgres / Supabase MCP)
    - Integrations (None / Composio / Custom)
    - Deployment (Local / Hetzner)
 
