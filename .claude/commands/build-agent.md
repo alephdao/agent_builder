@@ -26,9 +26,10 @@ docs/
 │   ├── 00-overview.md
 │   ├── 02-python-reference.md
 │   └── ... (others)
-└── templates/              # Architecture templates
-    ├── postgres-web-hetzner.md   # Full-stack (Smithers pattern)
-    └── sqlite-telegram.md        # Lightweight (Telegram bot pattern)
+├── templates/              # Architecture templates
+│   ├── postgres-web-hetzner.md   # Full-stack (Smithers pattern)
+│   └── sqlite-telegram.md        # Lightweight (Telegram bot pattern)
+└── model-selection-guide.md   # Model comparison (Haiku/Sonnet/Opus)
 ```
 
 ## Reference Implementations
@@ -47,7 +48,9 @@ docs/
 
 ### Phase 1: Architecture Selection
 
-**Use AskUserQuestion to determine the template.** Ask these 4 questions FIRST:
+**Use AskUserQuestion to determine the template.** Ask questions in TWO rounds:
+
+#### Round 1A: Core Architecture (4 questions)
 
 ```
 Question 1: "What interface will users interact with?"
@@ -57,31 +60,67 @@ Options:
 - "Web app" - Custom frontend, multi-feature dashboard
 - "CLI only" - Command-line tool, developer-focused
 
-Question 2: "What database do you need?"
-Header: "Database"
+Question 2: "What type of data storage?"
+Header: "Storage"
 Options:
-- "SQLite (committed)" - Simple, portable, version controlled
-- "SQLite (local only)" - Simple, not committed, .gitignore'd
-- "Postgres (local)" - Scalable, run locally for development
-- "Postgres (Hetzner)" - Production-ready, hosted on Hetzner server
+- "JSON files" - Simplest, human-readable, version-controlled
+- "SQLite (local)" - File-based SQL, portable, gitignored
+- "Postgres (local)" - Full SQL database, local development
+- "Supabase" - Managed Postgres, no infrastructure setup
 
-Question 3: "Will this agent need external integrations?"
+Question 3: "What kind of data will this agent store?"
+Header: "Data Type"
+Options:
+- "Conversations only" - Just chat history
+- "User preferences" - Settings, configs, user-specific data
+- "Rich documents" - Meetings, notes, health records, etc.
+- "Multiple types" - Combination of above
+
+Question 4: "Will this agent need external integrations?"
 Header: "Integrations"
 Options:
 - "None" - Self-contained, no external APIs
-- "Composio" - Google Calendar, Asana, Slack, etc. via Composio
-- "Custom APIs" - Direct API integrations (you'll implement)
+- "Composio" - Calendar, Asana, Slack via OAuth
+- "Custom APIs" - Direct API integrations you'll build
+```
 
-Question 4: "Where will this agent run?"
+#### Round 1B: Deployment & Auth (4 questions)
+
+**NOTE:** Before asking Question 5, read `docs/model-selection-guide.md` to understand model tradeoffs.
+
+```
+Question 5: "Which Claude model should power this agent?"
+Header: "Model"
+Options:
+- "Haiku (claude-haiku-4-5-20251001)" - Lightning fast, lower cost, less capable. Best for: simple tasks, high volume, speed-critical
+- "Sonnet (claude-sonnet-4-5-20250929)" - Balanced speed/intelligence/cost. Best for: most agents, coding, general purpose (Recommended)
+- "Opus (claude-opus-4-5-20251101)" - Highest intelligence, slower, premium cost. Best for: complex reasoning, critical decisions
+
+Question 6: "How will users authenticate?"
+Header: "Auth"
+Options:
+- "None" - Open access, no authentication
+- "Telegram user ID" - Built-in Telegram auth (for bots)
+- "Clerk" - Web auth with OAuth providers (Google, GitHub, etc.)
+- "Custom" - You'll implement your own auth
+
+Question 7: "How will Claude be accessed?"
+Header: "Claude API"
+Options:
+- "API Key" - Direct Anthropic API with your key (you pay per token)
+- "OAuth Token" - User's Claude subscription token (they pay, via Claude.ai login)
+
+Question 8: "Where will this agent run?"
 Header: "Deployment"
 Options:
 - "Local only" - Development/personal use
-- "Hetzner server" - Production deployment via Tailscale
+- "Hetzner server" - Production VPS via Tailscale
+- "Docker" - Containerized deployment
 ```
 
 **Based on answers, read the matching template:**
-- Telegram + SQLite → Read `docs/templates/sqlite-telegram.md`
-- Web + Postgres + Hetzner → Read `docs/templates/postgres-web-hetzner.md`
+- Telegram + JSON/SQLite → Read `docs/templates/sqlite-telegram.md` + `docs/reference-implementations/telegram-bot-patterns.md`
+- Web + Postgres/Supabase → Read `docs/templates/postgres-web-hetzner.md` + `docs/reference-implementations/smithers-patterns.md`
 
 ### Phase 2: Deep Interview
 
@@ -161,22 +200,56 @@ Template: {selected template}
 - **Name**: {name}
 - **Slug**: {slug}
 - **Description**: {1-2 sentences}
-- **Interface**: {Telegram / Web / CLI}
-- **Database**: {SQLite / Postgres}
-- **Deployment**: {Local / Hetzner}
-- **Integrations**: {None / Composio / Custom}
 
 ## Architecture Decisions
-{Details based on Phase 1 answers}
+
+### Interface & Frontend
+- **Interface**: {Telegram / Web / CLI}
+- **Frontend Details**: {specific framework, features}
+
+### Data & Storage
+- **Storage Type**: {JSON / SQLite / Postgres / Supabase}
+- **Data Types**: {conversations, preferences, documents, etc.}
+- **Retention Policy**: {how long data is kept}
+
+### Integrations & Tools
+- **Integration Method**: {None / Composio / Custom}
+- **Specific Integrations**: {Calendar, Asana, Slack, etc.}
+- **Custom Tools**: {list of custom tools needed}
+
+### Model & API
+- **Claude Model**: {Haiku / Sonnet / Opus}
+- **Model ID**: {claude-XXX-X-X-XXXXXXXX}
+- **API Method**: {API Key / OAuth Token}
+- **Rationale**: {why this model was chosen}
+
+### Authentication & Security
+- **Auth Method**: {None / Telegram / Clerk / Custom}
+- **User Management**: {single-user / multi-user}
+- **Security Requirements**: {data privacy, access control}
+
+### Deployment
+- **Environment**: {Local / Hetzner / Docker}
+- **Infrastructure**: {VPS, containers, systemd}
+- **Scaling Considerations**: {single-instance / load-balanced}
 
 ## System Prompt Requirements
-{Based on Phase 2 interview}
+{Based on Phase 2 interview - personality, tone, capabilities}
 
-## Technical Details
-{Error handling, performance, data retention}
+## Technical Implementation Details
+- **Error Handling**: {retry logic, fallbacks, user messaging}
+- **Performance**: {caching, rate limits, timeouts}
+- **Data Retention**: {cleanup policies, archiving}
+- **Logging & Monitoring**: {what to log, where to send logs}
+
+## User Experience Flow
+{Example interactions showing typical user journeys}
+
+## Edge Cases & Safety
+{Boundary conditions, error scenarios, safety guardrails}
 
 ## Interview Summary
-{Key insights from interview}
+{Key insights and decisions from interview rounds}
 ```
 
 ### Phase 4: User Review

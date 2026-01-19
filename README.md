@@ -34,7 +34,9 @@ Run `/build-agent` in Claude Code and answer questions. The system will:
    ```
 
 4. **Answer the questions:**
-   - Architecture questions (4 questions about interface, database, integrations, deployment)
+   - Architecture questions (8 questions in 2 rounds):
+     - Core: interface, storage, data types, integrations
+     - Config: model selection, auth, API method, deployment
    - Deep interview (8 rounds about identity, personality, implementation, etc.)
 
 5. **Review the generated spec:**

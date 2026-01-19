@@ -134,11 +134,19 @@ Complete implementation guide for:
 
 ## How /build-agent Works
 
-1. **Architecture Selection** - Asks 4 questions to determine template:
+1. **Architecture Selection** - Asks 8 comprehensive questions in 2 rounds:
+
+   **Round 1A - Core Architecture:**
    - Interface (Telegram / Web / CLI)
-   - Database (SQLite / Postgres / Supabase MCP)
-   - Integrations (None / Composio / Custom)
-   - Deployment (Local / Hetzner)
+   - Storage type (JSON / SQLite / Postgres / Supabase)
+   - Data types (conversations / preferences / documents)
+   - Integrations (None / Composio / Custom APIs)
+
+   **Round 1B - Deployment & Config:**
+   - Model selection (Haiku / Sonnet / Opus with speed/intelligence/cost tradeoffs)
+   - Authentication (None / Telegram / Clerk / Custom)
+   - Claude API method (API Key vs OAuth Token)
+   - Deployment target (Local / Hetzner / Docker)
 
 2. **Deep Interview** - 8 rounds of non-obvious questions about:
    - Core identity & purpose
